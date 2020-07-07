@@ -1,0 +1,21 @@
+public class PostmanCallouts {
+
+    public static HttpResponse makeGetCallout() {
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://postman-echo.com/get?foo1=bar1&foo2=bar2');
+        request.setMethod('GET');
+        HttpResponse response = http.send(request);
+        
+        if (response.getStatusCode() == 200) {
+            
+            Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+            
+            List<Object> olist = (List<Object>) results.get('olist');
+            System.debug('Received the following postman:');
+            for (Object p: olist) {
+                System.debug(p);
+            }
+        }
+        return response;
+    }
