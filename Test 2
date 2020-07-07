@@ -1,0 +1,29 @@
+public class accountsClass {
+
+@auraEnabled
+public static list<account> getAllAccounts()
+    {
+       list<account> accs =[select id,name from account limit 10];
+      
+     return accs;
+    }
+}
+
+
+<aura:component controller="accountsClass" implements="flexipage:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.myAction}"/>
+    <aura:attribute name="accounts" type="Account[]" />
+    <table>
+        <tr>
+            <td>
+                <b>Name</b>
+            </td>
+            
+        </tr>
+        <aura:iteration items="{!v.accounts}" var="accs1" >
+            <tr>  
+                <td> {!accs1.Name}  </td>
+            </tr> 
+         </aura:iteration>                                           
+      
+</aura:compone>
