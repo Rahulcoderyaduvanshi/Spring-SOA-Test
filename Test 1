@@ -1,0 +1,33 @@
+trigger Count_No on Contact (After insert,After update,After delete) 
+{
+set<id> sid=new set<id>();
+    If(Trigger.isInsert || Trigger.isUpdate)
+    {
+        for(Contact c:trigger.new)
+        {
+            sid.add(c.accountid);
+        }
+    }
+    If(Trigger.isDelete)
+    {
+        for(Contact c1:trigger.old)
+        {
+            sid.add(c1.accountid);
+        }
+    }
+    list<account>acclist=new list<account>();
+    for(account ac:[select id,(select id from contacts) from account where id in:sid])
+    {
+        ac.Number_of_Contacts__c=ac.contacts.size();
+        acclist.add(ac);
+    }
+    try
+    {
+        update acclist;
+    }
+    catch(Exception e)
+    {
+        System.debug('Exception '+e.getMessage());
+    }
+    
+}
